@@ -989,7 +989,10 @@ app.post("/stop", (req, res) => {
   if (!botRunning) return res.json({ success: false, msg: "Already stopped" });
 
   botRunning = false;
-
+  
+  clearBotTimeouts();
+  isReconnecting = false;
+  
   if (bot) {
     bot.end();
     bot = null;
