@@ -6,7 +6,7 @@
     "type": "offline"
   },
   "server": {
-    "ip": "mundus.aternos.me",
+    "ip": "trumpeter.aternos.host",
     "port": 45026,
     "version": "1.20",
     "try-creative": false
