@@ -6,7 +6,7 @@
     "type": "offline"
   },
   "server": {
-    "ip": "muskellunge.aternos.host",
+    "ip": "chorkie.aternos.host",
     "port": 45026,
     "version": "1.20",
     "try-creative": false
