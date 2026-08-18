@@ -476,6 +476,57 @@ app.get("/health", (req, res) => {
 
 app.get("/ping", (req, res) => res.send("pong"));
 
+const net = require("net");
+
+app.get("/network-test", (req, res) => {
+  const host = config.server.ip;
+  const port = config.server.port;
+
+  const socket = new net.Socket();
+  let finished = false;
+
+  const finish = (result) => {
+    if (finished) return;
+    finished = true;
+    socket.destroy();
+    res.json(result);
+  };
+
+  socket.setTimeout(10000);
+
+  socket.on("connect", () => {
+    addLog(`[NetworkTest] TCP connection SUCCESS: ${host}:${port}`);
+    finish({
+      success: true,
+      host,
+      port,
+      message: "Render can reach the server port."
+    });
+  });
+
+  socket.on("timeout", () => {
+    addLog(`[NetworkTest] TCP TIMEOUT: ${host}:${port}`);
+    finish({
+      success: false,
+      host,
+      port,
+      error: "ETIMEDOUT"
+    });
+  });
+
+  socket.on("error", (err) => {
+    addLog(`[NetworkTest] TCP ERROR: ${err.code || err.message}`);
+    finish({
+      success: false,
+      host,
+      port,
+      error: err.code || err.message
+    });
+  });
+
+  socket.connect(port, host);
+});
+
 app.get("/logs", (req, res) => {
   const logs = getLogs();
 
